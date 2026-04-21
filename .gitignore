@@ -1,0 +1,12 @@
+# Secrets (copy from Secrets.sample.plist locally)
+LaunchBox/Resources/Secrets.plist
+
+# Xcode
+**/xcuserdata/
+*.xcuserstate
+DerivedData/
+*.moved-aside
+*.hmap
+
+# macOS
+.DS_Store

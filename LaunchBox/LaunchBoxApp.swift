@@ -2,17 +2,17 @@
 //  LaunchBoxApp.swift
 //  LaunchBox
 //
-//  Created by Cleavand Smith on 4/20/26.
-//
 
-import SwiftUI
 import SwiftData
+import SwiftUI
 
 @main
 struct LaunchBoxApp: App {
+    @AppStorage("appearance") private var appearanceRaw = AppearanceMode.system.rawValue
+
     var sharedModelContainer: ModelContainer = {
         let schema = Schema([
-            Item.self,
+            AppItem.self,
         ])
         let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
 
@@ -23,10 +23,19 @@ struct LaunchBoxApp: App {
         }
     }()
 
+    init() {
+        OneSignalService.configure(launchOptions: nil)
+    }
+
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            RootAppView()
+                .preferredColorScheme(resolvedColorScheme)
         }
         .modelContainer(sharedModelContainer)
+    }
+
+    private var resolvedColorScheme: ColorScheme? {
+        AppearanceMode(rawValue: appearanceRaw)?.colorScheme
     }
 }
