@@ -8,72 +8,56 @@ import SwiftUI
 
 struct RootView: View {
     @State private var router = AppRouter()
+    @Environment(\.scenePhase) private var scenePhase
 
     var body: some View {
         @Bindable var router = router
 
         TabView(selection: $router.selectedTab) {
-            Tab("Home", systemImage: "house", value: AppTab.home) {
-                NavigationStack(path: $router.homePath) {
-                    HomeView(router: router)
+            Tab(String(localized: "Chores"), systemImage: "arrow.triangle.2.circlepath", value: AppTab.chores) {
+                NavigationStack(path: $router.choresPath) {
+                    ChoresView(router: router)
                         .navigationDestination(for: AppRoute.self) { route in
                             switch route {
-                            case .itemDetail(let id):
-                                HomeDetailView(itemID: id)
-                            case .settings:
-                                SettingsView()
+                            case .choreDetail(let id):
+                                ChoreDetailView(choreID: id, router: router)
+                            case .addChore:
+                                AddChoreView(router: router)
+                            case .history:
+                                HistoryView(router: router)
+                            case .editMember(_):
+                                EmptyView()
                             }
                         }
                 }
             }
 
-            Tab("Explore", systemImage: "magnifyingglass", value: AppTab.explore) {
-                NavigationStack(path: $router.explorePath) {
-                    ExploreView(router: router)
+            Tab(String(localized: "Settings"), systemImage: "gearshape", value: AppTab.settings) {
+                NavigationStack(path: $router.settingsPath) {
+                    SettingsView(router: router)
                         .navigationDestination(for: AppRoute.self) { route in
                             switch route {
-                            case .itemDetail(let id):
-                                HomeDetailView(itemID: id)
-                            case .settings:
-                                SettingsView()
-                            }
-                        }
-                }
-            }
-
-            Tab("Notifications", systemImage: "bell", value: AppTab.notifications) {
-                NavigationStack(path: $router.notificationsPath) {
-                    NotificationsView()
-                        .navigationDestination(for: AppRoute.self) { route in
-                            switch route {
-                            case .itemDetail(let id):
-                                HomeDetailView(itemID: id)
-                            case .settings:
-                                SettingsView()
-                            }
-                        }
-                }
-            }
-
-            Tab("Profile", systemImage: "person.crop.circle", value: AppTab.profile) {
-                NavigationStack(path: $router.profilePath) {
-                    ProfileView(router: router)
-                        .navigationDestination(for: AppRoute.self) { route in
-                            switch route {
-                            case .itemDetail(let id):
-                                HomeDetailView(itemID: id)
-                            case .settings:
-                                SettingsView()
+                            case .choreDetail(_), .addChore, .history:
+                                EmptyView()
+                            case .editMember(let id):
+                                EditMemberView(memberID: id, router: router)
                             }
                         }
                 }
             }
         }
         .tabViewStyle(.sidebarAdaptable)
+        .onChange(of: scenePhase) { _, new in
+            guard new == .active else { return }
+            Task { await WhoseTurnIntentDonation.refreshOnForeground() }
+        }
     }
 }
 
 #Preview {
     RootView()
-        .modelContainer(for: AppItem.self, inMemory: true)
+        .modelContainer(
+            for: [Household.self, Member.self, Chore.self, ChoreLog.self],
+            inMemory: true
+        )
 }

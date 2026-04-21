@@ -17,12 +17,12 @@ struct SplashView: View {
                 .ignoresSafeArea()
 
             VStack(spacing: AppTheme.Spacing.md) {
-                Image(systemName: "shippingbox.fill")
+                Image(systemName: "arrow.triangle.2.circlepath")
                     .font(.system(size: AppTheme.IconSize.splash, weight: .medium))
                     .foregroundStyle(.white)
                     .accessibilityHidden(true)
 
-                Text("LaunchBox")
+                Text(String(localized: "Whose Turn?"))
                     .font(.largeTitle.weight(.bold))
                     .foregroundStyle(.white)
             }

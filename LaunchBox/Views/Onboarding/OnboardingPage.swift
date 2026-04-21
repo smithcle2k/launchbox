@@ -39,22 +39,22 @@ struct OnboardingPage: Identifiable, Hashable {
 extension OnboardingPage {
     static let defaultWalkthrough: [OnboardingPage] = [
         OnboardingPage(
-            id: "welcome",
-            title: "Welcome",
-            subtitle: "Your universal SwiftUI shell—tabs, navigation, and data ready to extend.",
-            systemImage: "sparkles"
+            id: "people",
+            title: "Add your people",
+            subtitle: "Everyone who shares chores—roommates, partner, or kids. You can edit names anytime in Settings.",
+            systemImage: "person.2.fill"
         ),
         OnboardingPage(
-            id: "organize",
-            title: "Stay organized",
-            subtitle: "Use Home for your content and Explore to search across everything.",
-            systemImage: "square.grid.2x2"
+            id: "chores",
+            title: "Add chores",
+            subtitle: "Create a chore, pick who rotates, and tap Done when it’s finished. We’ll move to the next person automatically.",
+            systemImage: "checklist"
         ),
         OnboardingPage(
-            id: "you",
-            title: "Make it yours",
-            subtitle: "Adjust settings, appearance, and notifications anytime in Profile.",
-            systemImage: "person.crop.circle"
+            id: "privacy",
+            title: "On your device only",
+            subtitle: "No accounts, no tracking, no cloud. Your household list stays on this iPhone or iPad.",
+            systemImage: "lock.fill"
         ),
     ]
 }

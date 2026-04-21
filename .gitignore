@@ -5,6 +5,7 @@ LaunchBox/Resources/Secrets.plist
 **/xcuserdata/
 *.xcuserstate
 DerivedData/
+build/
 *.moved-aside
 *.hmap
 

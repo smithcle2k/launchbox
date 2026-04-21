@@ -16,10 +16,8 @@ enum AppPhase: Hashable {
 // MARK: - Tabs (type-safe TabView selection)
 
 enum AppTab: String, CaseIterable, Hashable, Identifiable {
-    case home
-    case explore
-    case notifications
-    case profile
+    case chores
+    case settings
 
     var id: String { rawValue }
 }
@@ -27,8 +25,10 @@ enum AppTab: String, CaseIterable, Hashable, Identifiable {
 // MARK: - Navigation routes (typed stack destinations)
 
 enum AppRoute: Hashable {
-    case itemDetail(UUID)
-    case settings
+    case choreDetail(UUID)
+    case addChore
+    case editMember(UUID)
+    case history
 }
 
 // MARK: - Router
@@ -36,10 +36,8 @@ enum AppRoute: Hashable {
 @Observable
 @MainActor
 final class AppRouter {
-    var selectedTab: AppTab = .home
+    var selectedTab: AppTab = .chores
 
-    var homePath = NavigationPath()
-    var explorePath = NavigationPath()
-    var notificationsPath = NavigationPath()
-    var profilePath = NavigationPath()
+    var choresPath = NavigationPath()
+    var settingsPath = NavigationPath()
 }

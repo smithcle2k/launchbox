@@ -8,23 +8,31 @@ import SwiftUI
 
 @main
 struct LaunchBoxApp: App {
+    @UIApplicationDelegateAdaptor(AppDelegate.self) private var appDelegate
     @AppStorage("appearance") private var appearanceRaw = AppearanceMode.system.rawValue
 
-    var sharedModelContainer: ModelContainer = {
-        let schema = Schema([
-            AppItem.self,
-        ])
-        let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
+    /// Local-only SwiftData store. Multi-user sync uses `HouseholdCloudKitStore` (SwiftData cannot use CloudKit shared DB).
+    private let sharedModelContainer: ModelContainer
 
+    init() {
+        let schema = Schema([
+            Household.self,
+            Member.self,
+            Chore.self,
+            ChoreLog.self,
+        ])
+        let modelConfiguration = ModelConfiguration(
+            schema: schema,
+            isStoredInMemoryOnly: false,
+            cloudKitDatabase: .none
+        )
         do {
-            return try ModelContainer(for: schema, configurations: [modelConfiguration])
+            let container = try ModelContainer(for: schema, configurations: [modelConfiguration])
+            sharedModelContainer = container
+            ModelContainerHolder.container = container
         } catch {
             fatalError("Could not create ModelContainer: \(error)")
         }
-    }()
-
-    init() {
-        OneSignalService.configure(launchOptions: nil)
     }
 
     var body: some Scene {
